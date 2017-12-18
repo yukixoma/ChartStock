@@ -1,0 +1,89 @@
+<script src="socket.io/socket.io.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" 
+integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+
+<script
+src="https://code.jquery.com/jquery-3.2.1.js"
+integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+crossorigin="anonymous"></script>
+<div class="jumbotron text-center">
+    <h1> FCC Chart the Stock Market </h1>
+</div>
+<div>
+    <canvas id="myChart" width="400" height="400"></canvas>
+</div>
+<br>
+
+<div class="row">
+    <div class="col-lg-4"></div>
+    <div class="col-lg-4">
+        <form class="form-inline has-success justify-content-center">
+                <div class="form-group mx-sm-2">
+                    <input type="text" class="form-control" id="name" placeholder="Add Stock">
+                </div>
+                <button  class="btn btn-outline-success" type="button" id="add" >Add</button>
+        </form>
+        <form class="form-inline has-danger justify-content-center" >
+            <div class="form-group mx-sm-2">
+                <input type="text" class="form-control" id="rmName" placeholder="Remove Stock">
+            </div>
+            <button  class="btn btn-outline-danger" type="button" id="remove">Remove</button>
+        </form>
+    </div>
+</div>
+
+<nav class="navbar fixed-bottom navbar-light bg-faded">
+    <div class="row">
+        <div class="col-lg-6 text-left">
+            <a class="navbar-brand">Design by Yukixoma</a>
+            <br>
+            <a target="_blank" href="https://github.com/yukixoma"> Github </a>
+        </div>
+        <div class="col-lg-6 text-right">
+            Server: NODEJS
+            <br>
+            Client: HTML, Bootstrap, Jquery, Chart.js
+        </div>
+
+    </div>
+    
+</nav>
+
+
+
+<script>
+    window.onload = function () {
+        socket.emit("add","fb");
+    }
+    var socket = io("/");
+    $("#add").on("click", function(){
+        socket.emit("add", $("#name").val());
+        $("#name").val("");
+    })
+    $("#remove").on("click",function(){
+        socket.emit("remove", $("#rmName").val());
+        $("#rmName").val("");
+    })
+    socket.on("serverSentData", function(data){
+        var ctx = document.getElementById("myChart").getContext('2d');
+            ctx.canvas.width = 1200;
+            ctx.canvas.height = 300;
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data[0],
+                datasets: data[1]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                     }]
+                }
+            }
+        });
+    })
+</script>
