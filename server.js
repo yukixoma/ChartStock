@@ -30,7 +30,11 @@ io.on("connection", function(socket){
             for (var i = 0; i < symbols.length; i ++) {
                 var data = [];
                 var key = symbols[i].toUpperCase();
-                console.log(key);
+                if(!result[key]) {
+                    symbols.splice(i,1);
+                    socket.emit("err","Stock not found");
+                    return;
+                }
                 for(var x = 0; x < result[key].chart.length; x++) {
                     data.push(result[key].chart[x].close);
                     if (i<1) labels.push(result[key].chart[x].date);
