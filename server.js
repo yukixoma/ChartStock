@@ -15,9 +15,9 @@ io.on("connection", function(socket){
     socket.on("add", function(data){
         if(data == "") return;
         for (var i = 0; i <symbols.length; i++) {
-            if(symbols[i] == data || symbols == data.toUpperCase()) symbols.splice(i,1);
+            if(symbols[i] == data) symbols.splice(i,1);
         }
-        symbols.push(data);
+        symbols.push(data.toLowerCase());
         console.log(symbols.toString());
         const url = "https://api.iextrading.com/1.0/stock/market/batch?symbols=" 
         + symbols.toString() + "&types=chart";
@@ -51,7 +51,7 @@ io.on("connection", function(socket){
     })
     socket.on("remove", function(data){
         for(var i = 0; i < symbols.length; i++) {
-            if (symbols[i] == data) symbols.splice(i,1);
+            if (symbols[i] == data.toLowerCase()) symbols.splice(i,1);
         }
         const url = "https://api.iextrading.com/1.0/stock/market/batch?symbols=" 
         + symbols.toString() + "&types=chart";
