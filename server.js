@@ -15,7 +15,7 @@ io.on("connection", function(socket){
     socket.on("add", function(data){
         if(data == "") return;
         for (var i = 0; i <symbols.length; i++) {
-            if(symbols[i] == data) symbols.splice(i,1);
+            if(symbols[i] == data || symbols == data.toUpperCase()) symbols.splice(i,1);
         }
         symbols.push(data);
         console.log(symbols.toString());
